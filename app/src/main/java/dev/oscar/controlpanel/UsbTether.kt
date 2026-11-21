@@ -58,4 +58,15 @@ object UsbTether {
         val arg = if (list.isEmpty()) "none" else list.joinToString(",")
         return su("svc usb setFunctions $arg").first == 0
     }
+
+    /** True when wireless debugging is on (readable by any app). */
+    fun isWifiDebugOn(ctx: Context): Boolean = try {
+        android.provider.Settings.Global.getInt(ctx.contentResolver, "adb_wifi_enabled", 0) == 1
+    } catch (e: Exception) {
+        false
+    }
+
+    /** Turns wireless debugging on or off as root. Call off the main thread. */
+    fun setWifiDebug(enable: Boolean): Boolean =
+        su("settings put global adb_wifi_enabled ${if (enable) 1 else 0}").first == 0
 }

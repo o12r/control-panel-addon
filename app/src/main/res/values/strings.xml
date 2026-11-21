@@ -11,6 +11,14 @@
     <string name="tile_on">On</string>
     <string name="tile_off">Off</string>
     <string name="tile_settings_mode">Opens tethering settings</string>
+    <string name="wifi_title">Wireless debugging</string>
+    <string name="wifi_root_yes">Root detected: you can switch it on or off here.</string>
+    <string name="wifi_root_no">No root: the button opens developer options.</string>
+    <string name="wifi_turn_on">Turn on</string>
+    <string name="wifi_turn_off">Turn off</string>
+    <string name="wifi_open_dev">Open developer options</string>
+    <string name="tile_wifi_debug">Wireless debugging</string>
+    <string name="tile_dev_mode">Opens developer options</string>
     <string name="updates">Updates</string>
     <string name="version_fmt">Version %1$s (%2$d)</string>
     <string name="check_updates">Check for updates</string>

@@ -178,6 +178,8 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
             }
         }
 
+        WifiDebugSection(rooted = rooted)
+
         Section(title = stringResource(R.string.updates)) {
             Text(stringResource(R.string.version_fmt, updater.currentName, updater.currentCode))
             if (checked && update == null && updateError == null) {
@@ -238,6 +240,56 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
             ).forEach { (key, label) ->
                 Choice(stringResource(label), selected = lang == key) { onLang(key) }
             }
+        }
+    }
+}
+
+@Composable
+fun WifiDebugSection(rooted: Boolean) {
+    val ctx = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var on by remember { mutableStateOf(false) }
+    var busy by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            on = withContext(Dispatchers.IO) { UsbTether.isWifiDebugOn(ctx) }
+            delay(3000)
+        }
+    }
+    Section(title = stringResource(R.string.wifi_title)) {
+        Text(stringResource(if (on) R.string.tile_on else R.string.tile_off))
+        Text(
+            stringResource(if (rooted) R.string.wifi_root_yes else R.string.wifi_root_no),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Button(
+            enabled = !busy,
+            onClick = {
+                if (rooted) {
+                    busy = true
+                    scope.launch {
+                        withContext(Dispatchers.IO) { UsbTether.setWifiDebug(!on) }
+                        delay(1000)
+                        on = withContext(Dispatchers.IO) { UsbTether.isWifiDebugOn(ctx) }
+                        busy = false
+                    }
+                } else {
+                    ctx.startActivity(
+                        Intent(android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    )
+                }
+            },
+        ) {
+            Text(
+                stringResource(
+                    when {
+                        !rooted -> R.string.wifi_open_dev
+                        on -> R.string.wifi_turn_off
+                        else -> R.string.wifi_turn_on
+                    }
+                )
+            )
         }
     }
 }

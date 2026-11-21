@@ -28,6 +28,16 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+        <service
+            android:name=".WifiDebugTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_usb_tether"
+            android:label="@string/tile_wifi_debug"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
         <receiver android:name=".InstallReceiver" android:exported="false" />
     </application>
 </manifest>

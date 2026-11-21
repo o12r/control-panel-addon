@@ -11,6 +11,14 @@
     <string name="tile_on">已开启</string>
     <string name="tile_off">已关闭</string>
     <string name="tile_settings_mode">打开共享设置</string>
+    <string name="wifi_title">无线调试</string>
+    <string name="wifi_root_yes">已检测到 root：可以在这里直接开关。</string>
+    <string name="wifi_root_no">没有 root：按钮会打开开发者选项。</string>
+    <string name="wifi_turn_on">开启</string>
+    <string name="wifi_turn_off">关闭</string>
+    <string name="wifi_open_dev">打开开发者选项</string>
+    <string name="tile_wifi_debug">无线调试</string>
+    <string name="tile_dev_mode">打开开发者选项</string>
     <string name="updates">更新</string>
     <string name="version_fmt">版本 %1$s（%2$d）</string>
     <string name="check_updates">检查更新</string>
