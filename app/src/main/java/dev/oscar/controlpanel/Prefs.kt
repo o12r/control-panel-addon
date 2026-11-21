@@ -12,6 +12,11 @@ class Prefs(ctx: Context) {
         get() = p.getString("theme", "system") ?: "system"
         set(v) = p.edit().putString("theme", v).apply()
 
+    /** "root", "shizuku" or "none"; null until the first-run choice is made. */
+    var privilege: String?
+        get() = p.getString("privilege", null)
+        set(v) = p.edit().putString("privilege", v).apply()
+
     var lang: String
         get() = p.getString("lang", "system") ?: "system"
         set(v) = p.edit().putString("lang", v).apply()

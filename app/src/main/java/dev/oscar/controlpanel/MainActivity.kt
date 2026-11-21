@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +55,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Privilege.load(this)
         setContent { AppRoot() }
     }
 }
@@ -101,14 +104,16 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
     val scope = rememberCoroutineScope()
     val zh = ctx.resources.configuration.locales[0].language == "zh"
     val updater = remember { Updater(ctx) }
+    var priv by remember { mutableStateOf(Privilege.mode) }
+    var firstRun by remember { mutableStateOf(Prefs(ctx).privilege == null) }
 
     // USB tethering state
     var rooted by remember { mutableStateOf(false) }
     var usbOn by remember { mutableStateOf(false) }
     var usbBusy by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        rooted = withContext(Dispatchers.IO) { UsbTether.hasRoot() }
+    LaunchedEffect(priv) {
         while (true) {
+            rooted = withContext(Dispatchers.IO) { Privilege.available() }
             usbOn = withContext(Dispatchers.IO) { UsbTether.isOn(ctx) }
             delay(3000)
         }
@@ -130,6 +135,14 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
     val banner = hotfix.banner(zh)
     val required = hotfix.minVersionCode > updater.currentCode
 
+    if (firstRun) {
+        FirstRunDialog { chosen ->
+            Privilege.set(ctx, chosen)
+            priv = chosen
+            firstRun = false
+        }
+    }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -141,6 +154,8 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
 
         banner?.let { Section { Text(it) } }
         if (required) Section { Text(stringResource(R.string.hotfix_required)) }
+
+        PrivilegeSection(current = priv) { priv = it }
 
         Section(title = stringResource(R.string.usb_title)) {
             Text(stringResource(if (usbOn) R.string.tile_on else R.string.tile_off))
@@ -241,6 +256,52 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
                 Choice(stringResource(label), selected = lang == key) { onLang(key) }
             }
         }
+    }
+}
+
+/** First-run choice: root, Shizuku, or later (no privilege). Shown until a choice is saved. */
+@Composable
+fun FirstRunDialog(onChosen: (String) -> Unit) {
+    val ctx = LocalContext.current
+    fun pick(mode: String) {
+        if (mode == Privilege.SHIZUKU) Privilege.requestShizuku()
+        onChosen(mode)
+    }
+    AlertDialog(
+        onDismissRequest = {},
+        title = { Text(stringResource(R.string.first_run_title)) },
+        text = { Text(stringResource(R.string.first_run_text)) },
+        confirmButton = {
+            Column {
+                TextButton(onClick = { pick(Privilege.ROOT) }) { Text(stringResource(R.string.priv_root)) }
+                TextButton(onClick = { pick(Privilege.SHIZUKU) }) { Text(stringResource(R.string.priv_shizuku)) }
+                TextButton(onClick = { pick(Privilege.NONE) }) { Text(stringResource(R.string.first_run_later)) }
+            }
+        },
+    )
+}
+
+/** Settings: pick the privilege at any time. Choosing Shizuku asks Shizuku for permission. */
+@Composable
+fun PrivilegeSection(current: String, onChange: (String) -> Unit) {
+    val ctx = LocalContext.current
+    var msg by remember { mutableStateOf<String?>(null) }
+    Section(title = stringResource(R.string.priv_title)) {
+        listOf(
+            Privilege.ROOT to R.string.priv_root,
+            Privilege.SHIZUKU to R.string.priv_shizuku,
+            Privilege.NONE to R.string.priv_none,
+        ).forEach { (key, label) ->
+            Choice(stringResource(label), selected = current == key) {
+                Privilege.set(ctx, key)
+                msg = null
+                if (key == Privilege.SHIZUKU && !Privilege.requestShizuku()) {
+                    msg = ctx.getString(R.string.priv_shizuku_missing)
+                }
+                onChange(key)
+            }
+        }
+        msg?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
     }
 }
 

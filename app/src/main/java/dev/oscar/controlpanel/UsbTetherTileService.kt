@@ -20,11 +20,13 @@ class UsbTetherTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
+        Privilege.load(this)
         refresh()
     }
 
     override fun onClick() {
         super.onClick()
+        Privilege.load(this)
         io.execute {
             if (UsbTether.hasRoot()) {
                 UsbTether.setOn(!UsbTether.isOn(this))

@@ -25,25 +25,11 @@ object UsbTether {
         false
     }
 
-    /** Runs [cmd] as root with a 5 s limit. Returns (exit code, output); exit -1 on failure or timeout. */
-    fun su(cmd: String): Pair<Int, String> = try {
-        val p = ProcessBuilder("su", "-c", cmd).redirectErrorStream(true).start()
-        // Wait before reading: a Magisk/KernelSU prompt can block, and readText() would hang with it.
-        if (!p.waitFor(5, TimeUnit.SECONDS)) {
-            p.destroyForcibly()
-            -1 to "timeout"
-        } else {
-            p.exitValue() to p.inputStream.bufferedReader().readText().trim()
-        }
-    } catch (e: Exception) {
-        -1 to (e.message ?: "su failed")
-    }
+    /** Runs [cmd] with the selected privilege (root or Shizuku). */
+    fun su(cmd: String): Pair<Int, String> = Privilege.exec(cmd)
 
-    /** True when `su` grants root (uid=0). Blocks up to 5 s, so call it off the main thread. */
-    fun hasRoot(): Boolean {
-        val (code, out) = su("id")
-        return code == 0 && out.contains("uid=0")
-    }
+    /** True when the selected privilege (root or Shizuku) is usable. Call off the main thread. */
+    fun hasRoot(): Boolean = Privilege.available()
 
     /**
      * Turns USB tethering on or off by editing the USB function list.

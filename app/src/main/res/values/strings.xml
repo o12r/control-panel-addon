@@ -2,8 +2,16 @@
 <resources>
     <string name="app_name">Control Panel</string>
     <string name="usb_title">USB tethering</string>
-    <string name="usb_root_yes">Root detected: you can switch it on or off here.</string>
-    <string name="usb_root_no">No root: the button opens the system tethering settings.</string>
+    <string name="usb_root_yes">Privilege available: you can switch it on or off here.</string>
+    <string name="usb_root_no">No privilege: the button opens the system tethering settings.</string>
+    <string name="first_run_title">Choose how to control the phone</string>
+    <string name="first_run_text">USB tethering and wireless debugging need root or Shizuku. Without either, the buttons only open the system settings pages; they can\'t switch anything.</string>
+    <string name="first_run_later">Later</string>
+    <string name="priv_title">Privilege</string>
+    <string name="priv_root">Root</string>
+    <string name="priv_shizuku">Shizuku</string>
+    <string name="priv_none">None (open settings only)</string>
+    <string name="priv_shizuku_missing">Shizuku isn\'t running. Start Shizuku, then try again.</string>
     <string name="usb_turn_on">Turn on</string>
     <string name="usb_turn_off">Turn off</string>
     <string name="usb_open_settings">Open tethering settings</string>
@@ -12,8 +20,8 @@
     <string name="tile_off">Off</string>
     <string name="tile_settings_mode">Opens tethering settings</string>
     <string name="wifi_title">Wireless debugging</string>
-    <string name="wifi_root_yes">Root detected: you can switch it on or off here.</string>
-    <string name="wifi_root_no">No root: the button opens developer options.</string>
+    <string name="wifi_root_yes">Privilege available: you can switch it on or off here.</string>
+    <string name="wifi_root_no">No privilege: the button opens developer options.</string>
     <string name="wifi_turn_on">Turn on</string>
     <string name="wifi_turn_off">Turn off</string>
     <string name="wifi_open_dev">Open developer options</string>
