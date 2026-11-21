@@ -1,5 +1,0 @@
-<!-- Add to app/src/main/res/values/strings.xml -->
-    <string name="tile_usb_tether">USB tethering</string>
-    <string name="tile_on">On</string>
-    <string name="tile_off">Off</string>
-    <string name="tile_settings_mode">Opens tethering settings</string>

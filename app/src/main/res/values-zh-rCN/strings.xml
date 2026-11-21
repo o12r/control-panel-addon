@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">控制面板</string>
+    <string name="usb_title">USB 共享网络</string>
+    <string name="usb_root_yes">已检测到 root：可以在这里直接开关。</string>
+    <string name="usb_root_no">没有 root：按钮会打开系统的共享设置页面。</string>
+    <string name="usb_turn_on">开启</string>
+    <string name="usb_turn_off">关闭</string>
+    <string name="usb_open_settings">打开共享设置</string>
+    <string name="tile_usb_tether">USB 共享网络</string>
+    <string name="tile_on">已开启</string>
+    <string name="tile_off">已关闭</string>
+    <string name="tile_settings_mode">打开共享设置</string>
+    <string name="updates">更新</string>
+    <string name="version_fmt">版本 %1$s（%2$d）</string>
+    <string name="check_updates">检查更新</string>
+    <string name="checking">正在检查…</string>
+    <string name="up_to_date">已是最新版本。</string>
+    <string name="update_available">有可用更新：%1$s（%2$d）</string>
+    <string name="downloading">正在下载… %1$d%%</string>
+    <string name="install">安装</string>
+    <string name="update_failed">更新失败：%1$s</string>
+    <string name="hotfix_required">此版本已不再受支持，请更新。</string>
+    <string name="appearance">外观</string>
+    <string name="theme_system">跟随系统</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+    <string name="theme_black">纯黑</string>
+    <string name="language">语言</string>
+    <string name="lang_system">跟随系统</string>
+    <string name="lang_en">English</string>
+    <string name="lang_zh">中文</string>
+</resources>

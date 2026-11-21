@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Control Panel</string>
+    <string name="usb_title">USB tethering</string>
+    <string name="usb_root_yes">Root detected: you can switch it on or off here.</string>
+    <string name="usb_root_no">No root: the button opens the system tethering settings.</string>
+    <string name="usb_turn_on">Turn on</string>
+    <string name="usb_turn_off">Turn off</string>
+    <string name="usb_open_settings">Open tethering settings</string>
+    <string name="tile_usb_tether">USB tethering</string>
+    <string name="tile_on">On</string>
+    <string name="tile_off">Off</string>
+    <string name="tile_settings_mode">Opens tethering settings</string>
+    <string name="updates">Updates</string>
+    <string name="version_fmt">Version %1$s (%2$d)</string>
+    <string name="check_updates">Check for updates</string>
+    <string name="checking">Checking…</string>
+    <string name="up_to_date">You\'re on the latest version.</string>
+    <string name="update_available">Update available: %1$s (%2$d)</string>
+    <string name="downloading">Downloading… %1$d%%</string>
+    <string name="install">Install</string>
+    <string name="update_failed">Update failed: %1$s</string>
+    <string name="hotfix_required">This version is no longer supported. Please update.</string>
+    <string name="appearance">Appearance</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_black">True black</string>
+    <string name="language">Language</string>
+    <string name="lang_system">System</string>
+    <string name="lang_en">English</string>
+    <string name="lang_zh">中文</string>
+</resources>

@@ -1,5 +1,0 @@
-<!-- Add to app/src/main/res/values-zh-rCN/strings.xml -->
-    <string name="tile_usb_tether">USB 共享网络</string>
-    <string name="tile_on">已开启</string>
-    <string name="tile_off">已关闭</string>
-    <string name="tile_settings_mode">打开共享设置</string>

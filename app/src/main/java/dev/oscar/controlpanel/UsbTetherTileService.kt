@@ -1,4 +1,4 @@
-package dev.oscar.hermes
+package dev.oscar.controlpanel
 
 import android.app.PendingIntent
 import android.content.Intent
@@ -52,7 +52,7 @@ class UsbTetherTileService : TileService() {
 
     private fun pushState(on: Boolean, rooted: Boolean) {
         val t = qsTile ?: return
-        val ctx = L10n.ctx(this)
+        val ctx = L10n.wrap(this, Prefs(this).lang)
         t.label = ctx.getString(R.string.tile_usb_tether)
         t.state = if (on) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         t.subtitle = ctx.getString(

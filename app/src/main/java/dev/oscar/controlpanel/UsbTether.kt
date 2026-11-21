@@ -1,4 +1,4 @@
-package dev.oscar.hermes
+package dev.oscar.controlpanel
 
 import android.content.Context
 import java.net.NetworkInterface
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
  *
  * Normal apps cannot start or stop USB tethering (it needs TETHER_PRIVILEGED).
  * With root we toggle it through the USB function list: `svc usb setFunctions rndis,...`.
- * Without root the tile only reads the state and opens the system tethering page.
+ * Without root the app only reads the state and opens the system tethering page.
  */
 object UsbTether {
 
@@ -47,7 +47,7 @@ object UsbTether {
 
     /**
      * Turns USB tethering on or off by editing the USB function list.
-     * Keeps the other functions (for example adb or mtp) as they are. Call off the main thread.
+     * Keeps the other functions (for example adb or mtp). Call off the main thread.
      */
     fun setOn(enable: Boolean): Boolean {
         val (_, cur) = su("getprop sys.usb.config")
