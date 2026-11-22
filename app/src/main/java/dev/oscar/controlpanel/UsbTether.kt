@@ -35,14 +35,57 @@ object UsbTether {
      * Turns USB tethering on or off by editing the USB function list.
      * Keeps the other functions (for example adb or mtp). Call off the main thread.
      */
-    fun setOn(enable: Boolean): Boolean {
+    fun setOn(ctx: Context, enable: Boolean): Boolean {
+        val log = StringBuilder()
         val (_, cur) = su("getprop sys.usb.config")
+        log.append("sys.usb.config=").append(cur).append('\n')
         val others = cur.split(',')
             .map { it.trim() }
             .filter { it.isNotEmpty() && it != "rndis" && it != "none" }
         val list = if (enable) listOf("rndis") + others else others
         val arg = if (list.isEmpty()) "none" else list.joinToString(",")
-        return su("svc usb setFunctions $arg").first == 0
+
+        // Several routes, because vendor ROMs differ. The exit code alone proves nothing
+        // (svc returns 0 even when ignored), so each is verified against the real interface.
+        val methods = listOf(
+            "svc usb setFunctions $arg",
+            "setprop sys.usb.config $arg",
+            "svc usb setFunctions $arg && svc usb setScreenUnlockedFunctions $arg",
+        )
+        var ok = false
+        for (cmd in methods) {
+            val (code, out) = su(cmd)
+            log.append("\$ ").append(cmd).append("\n  exit=").append(code)
+            if (out.isNotEmpty()) log.append(" out=").append(out.take(200))
+            log.append('\n')
+            ok = waitForState(ctx, enable)
+            log.append("  -> ").append(if (ok) "state changed" else "state unchanged").append('\n')
+            if (ok) break
+        }
+        log.append("sys.usb.state=").append(su("getprop sys.usb.state").second).append('\n')
+        log.append("ifaces=").append(
+            try {
+                NetworkInterface.getNetworkInterfaces()?.toList().orEmpty()
+                    .joinToString(",") { it.name + if (it.isUp) "(up)" else "" }
+            } catch (e: Exception) {
+                "?"
+            }
+        )
+        lastLog = log.toString()
+        return ok
+    }
+
+    /** Output of the last [setOn] attempt: commands, exit codes and verification result. */
+    @Volatile
+    var lastLog: String = ""
+
+    /** Polls up to 3 s for the tether interface to reach the wanted state. */
+    private fun waitForState(ctx: Context, enable: Boolean): Boolean {
+        repeat(6) {
+            Thread.sleep(500)
+            if (isOn(ctx) == enable) return true
+        }
+        return false
     }
 
     /** True when wireless debugging is on (readable by any app). */

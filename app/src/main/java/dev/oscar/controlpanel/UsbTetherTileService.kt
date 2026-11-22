@@ -28,9 +28,15 @@ class UsbTetherTileService : TileService() {
         io.execute {
             Privilege.load(this)
             if (UsbTether.hasRoot()) {
-                UsbTether.setOn(!UsbTether.isOn(this))
-                // Tethering takes a moment to come up or go down.
-                main.postDelayed({ refresh() }, 2000)
+                val ok = UsbTether.setOn(this, !UsbTether.isOn(this))
+                if (!ok) {
+                    main.post {
+                        android.widget.Toast.makeText(
+                            this, R.string.usb_switch_failed, android.widget.Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+                main.post { refresh() }
             } else {
                 main.post { openSystemTethering() }
             }

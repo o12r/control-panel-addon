@@ -123,6 +123,7 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
     var rooted by remember { mutableStateOf(false) }
     var usbOn by remember { mutableStateOf(false) }
     var usbBusy by remember { mutableStateOf(false) }
+    var usbLog by remember { mutableStateOf("") }
     LaunchedEffect(priv) {
         while (true) {
             rooted = withContext(Dispatchers.IO) { Privilege.available() }
@@ -181,9 +182,9 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
                     if (rooted) {
                         usbBusy = true
                         scope.launch {
-                            withContext(Dispatchers.IO) { UsbTether.setOn(!usbOn) }
-                            delay(2000)
+                            withContext(Dispatchers.IO) { UsbTether.setOn(ctx, !usbOn) }
                             usbOn = withContext(Dispatchers.IO) { UsbTether.isOn(ctx) }
+                            usbLog = UsbTether.lastLog
                             usbBusy = false
                         }
                     } else {
@@ -202,6 +203,12 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
                         }
                     )
                 )
+            }
+            if (usbLog.isNotEmpty()) {
+                Text(stringResource(R.string.usb_log_title), style = MaterialTheme.typography.bodySmall)
+                androidx.compose.foundation.text.selection.SelectionContainer {
+                    Text(usbLog, style = MaterialTheme.typography.bodySmall)
+                }
             }
         }
 

@@ -14,6 +14,8 @@
     <string name="priv_shizuku">Shizuku</string>
     <string name="priv_none">无（只打开设置页面）</string>
     <string name="priv_shizuku_missing">Shizuku 未运行，请先启动 Shizuku 再试。</string>
+    <string name="usb_switch_failed">USB 共享网络没有变化，打开 App 查看详情。</string>
+    <string name="usb_log_title">最近一次尝试（长按可复制）：</string>
     <string name="usb_turn_on">开启</string>
     <string name="usb_turn_off">关闭</string>
     <string name="usb_open_settings">打开共享设置</string>
