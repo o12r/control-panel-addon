@@ -21,14 +21,13 @@ class WifiDebugTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        Privilege.load(this)
         refresh()
     }
 
     override fun onClick() {
         super.onClick()
-        Privilege.load(this)
         io.execute {
+            Privilege.load(this)
             if (UsbTether.hasRoot()) {
                 UsbTether.setWifiDebug(!UsbTether.isWifiDebugOn(this))
                 main.postDelayed({ refresh() }, 1000)
@@ -45,6 +44,7 @@ class WifiDebugTileService : TileService() {
 
     private fun refresh() {
         io.execute {
+            Privilege.load(this)
             val rooted = UsbTether.hasRoot()
             val on = UsbTether.isWifiDebugOn(this)
             main.post { pushState(on, rooted) }

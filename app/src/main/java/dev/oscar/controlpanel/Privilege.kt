@@ -19,8 +19,17 @@ object Privilege {
     @Volatile
     var mode: String = NONE
 
+    /** Loads the mode: auto-probed (root, then Shizuku) when auto-detect is on, else the saved choice. */
     fun load(ctx: Context) {
-        mode = Prefs(ctx).privilege ?: NONE
+        val prefs = Prefs(ctx)
+        mode = if (prefs.autoPrivilege) detect() else prefs.privilege ?: NONE
+    }
+
+    /** Probes for the highest usable privilege right now: root, then Shizuku, else none. Blocks; call off the main thread. */
+    fun detect(): String = when {
+        rootExec("id").let { it.first == 0 && it.second.contains("uid=0") } -> ROOT
+        shizukuReady() -> SHIZUKU
+        else -> NONE
     }
 
     fun set(ctx: Context, m: String) {

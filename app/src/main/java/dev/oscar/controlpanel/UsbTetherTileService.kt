@@ -20,14 +20,13 @@ class UsbTetherTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        Privilege.load(this)
         refresh()
     }
 
     override fun onClick() {
         super.onClick()
-        Privilege.load(this)
         io.execute {
+            Privilege.load(this)
             if (UsbTether.hasRoot()) {
                 UsbTether.setOn(!UsbTether.isOn(this))
                 // Tethering takes a moment to come up or go down.
@@ -46,6 +45,7 @@ class UsbTetherTileService : TileService() {
     /** Reads root + tether state off the main thread, then updates the tile on it. */
     private fun refresh() {
         io.execute {
+            Privilege.load(this)
             val rooted = UsbTether.hasRoot()
             val on = UsbTether.isOn(this)
             main.post { pushState(on, rooted) }

@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -55,7 +56,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Privilege.load(this)
+        // Privilege.load() can block up to 5s (su prompt), so it's loaded off the main thread in Panel's LaunchedEffect.
         setContent { AppRoot() }
     }
 }
@@ -105,7 +106,18 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
     val zh = ctx.resources.configuration.locales[0].language == "zh"
     val updater = remember { Updater(ctx) }
     var priv by remember { mutableStateOf(Privilege.mode) }
+    var autoPriv by remember { mutableStateOf(Prefs(ctx).autoPrivilege) }
     var firstRun by remember { mutableStateOf(Prefs(ctx).privilege == null) }
+
+    // Loads (or re-probes, when auto-detect is on) the privilege off the main thread, then refreshes state.
+    LaunchedEffect(autoPriv) {
+        while (true) {
+            withContext(Dispatchers.IO) { Privilege.load(ctx) }
+            priv = Privilege.mode
+            if (!autoPriv) break
+            delay(5000)
+        }
+    }
 
     // USB tethering state
     var rooted by remember { mutableStateOf(false) }
@@ -155,7 +167,7 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
         banner?.let { Section { Text(it) } }
         if (required) Section { Text(stringResource(R.string.hotfix_required)) }
 
-        PrivilegeSection(current = priv) { priv = it }
+        PrivilegeSection(current = priv, auto = autoPriv, onChange = { priv = it }) { autoPriv = it }
 
         Section(title = stringResource(R.string.usb_title)) {
             Text(stringResource(if (usbOn) R.string.tile_on else R.string.tile_off))
@@ -281,25 +293,52 @@ fun FirstRunDialog(onChosen: (String) -> Unit) {
     )
 }
 
-/** Settings: pick the privilege at any time. Choosing Shizuku asks Shizuku for permission. */
+/**
+ * Settings: auto-detect switch, plus a manual pick when it's off.
+ * Auto-detect probes root first, then Shizuku, every launch and every 5s while this screen is open.
+ */
 @Composable
-fun PrivilegeSection(current: String, onChange: (String) -> Unit) {
+fun PrivilegeSection(current: String, auto: Boolean, onChange: (String) -> Unit, onAutoChange: (Boolean) -> Unit) {
     val ctx = LocalContext.current
     var msg by remember { mutableStateOf<String?>(null) }
     Section(title = stringResource(R.string.priv_title)) {
-        listOf(
-            Privilege.ROOT to R.string.priv_root,
-            Privilege.SHIZUKU to R.string.priv_shizuku,
-            Privilege.NONE to R.string.priv_none,
-        ).forEach { (key, label) ->
-            Choice(stringResource(label), selected = current == key) {
-                Privilege.set(ctx, key)
-                msg = null
-                if (key == Privilege.SHIZUKU && !Privilege.requestShizuku()) {
-                    msg = ctx.getString(R.string.priv_shizuku_missing)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.priv_auto), modifier = Modifier.weight(1f))
+            Switch(
+                checked = auto,
+                onCheckedChange = {
+                    Prefs(ctx).autoPrivilege = it
+                    onAutoChange(it)
+                },
+            )
+        }
+        Text(stringResource(R.string.priv_auto_help), style = MaterialTheme.typography.bodySmall)
+        if (!auto) {
+            listOf(
+                Privilege.ROOT to R.string.priv_root,
+                Privilege.SHIZUKU to R.string.priv_shizuku,
+                Privilege.NONE to R.string.priv_none,
+            ).forEach { (key, label) ->
+                Choice(stringResource(label), selected = current == key) {
+                    Privilege.set(ctx, key)
+                    msg = null
+                    if (key == Privilege.SHIZUKU && !Privilege.requestShizuku()) {
+                        msg = ctx.getString(R.string.priv_shizuku_missing)
+                    }
+                    onChange(key)
                 }
-                onChange(key)
             }
+        } else {
+            Text(
+                stringResource(
+                    when (current) {
+                        Privilege.ROOT -> R.string.priv_root
+                        Privilege.SHIZUKU -> R.string.priv_shizuku
+                        else -> R.string.priv_none
+                    }
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+            )
         }
         msg?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
     }

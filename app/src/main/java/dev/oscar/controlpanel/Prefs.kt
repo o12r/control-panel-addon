@@ -17,6 +17,11 @@ class Prefs(ctx: Context) {
         get() = p.getString("privilege", null)
         set(v) = p.edit().putString("privilege", v).apply()
 
+    /** When on, every launch probes for the highest privilege (root, then Shizuku) instead of using the saved choice. */
+    var autoPrivilege: Boolean
+        get() = p.getBoolean("autoPrivilege", false)
+        set(v) = p.edit().putBoolean("autoPrivilege", v).apply()
+
     var lang: String
         get() = p.getString("lang", "system") ?: "system"
         set(v) = p.edit().putString("lang", v).apply()

@@ -8,6 +8,8 @@
     <string name="first_run_text">USB 共享和无线调试需要 Root 或 Shizuku 权限。没有权限时，按钮只会打开系统设置页面，无法直接切换。</string>
     <string name="first_run_later">稍后设置</string>
     <string name="priv_title">权限</string>
+    <string name="priv_auto">自动使用最高权限</string>
+    <string name="priv_auto_help">每次启动都会先尝试 Root，再尝试 Shizuku，都没有就只打开系统设置页面。</string>
     <string name="priv_root">Root</string>
     <string name="priv_shizuku">Shizuku</string>
     <string name="priv_none">无（只打开设置页面）</string>
