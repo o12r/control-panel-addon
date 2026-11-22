@@ -61,16 +61,16 @@ object Privilege {
     }
 
     /** Runs [cmd] with the current privilege, 5 s limit. Returns (exit code, output); -1 on failure. */
-    fun exec(cmd: String): Pair<Int, String> = when (mode) {
-        ROOT -> rootExec(cmd)
-        SHIZUKU -> shizukuExec(cmd)
+    fun exec(cmd: String, timeoutSec: Long = 5): Pair<Int, String> = when (mode) {
+        ROOT -> rootExec(cmd, timeoutSec)
+        SHIZUKU -> shizukuExec(cmd, timeoutSec)
         else -> -1 to "no privilege"
     }
 
-    private fun rootExec(cmd: String): Pair<Int, String> = try {
+    private fun rootExec(cmd: String, timeoutSec: Long = 5): Pair<Int, String> = try {
         val p = ProcessBuilder("su", "-c", cmd).redirectErrorStream(true).start()
         // Wait before reading: a Magisk/KernelSU prompt can block, and readText() would hang with it.
-        if (!p.waitFor(5, TimeUnit.SECONDS)) {
+        if (!p.waitFor(timeoutSec, TimeUnit.SECONDS)) {
             p.destroyForcibly()
             -1 to "timeout"
         } else {
@@ -84,7 +84,7 @@ object Privilege {
      * Runs through Shizuku's remote process. Shizuku marks newProcess as non-public in some
      * releases, so it is called by reflection.
      */
-    private fun shizukuExec(cmd: String): Pair<Int, String> = try {
+    private fun shizukuExec(cmd: String, timeoutSec: Long): Pair<Int, String> = try {
         val m = Shizuku::class.java.getDeclaredMethod(
             "newProcess",
             Array<String>::class.java,
@@ -93,7 +93,7 @@ object Privilege {
         )
         m.isAccessible = true
         val p = m.invoke(null, arrayOf("sh", "-c", cmd), null, null) as Process
-        if (!p.waitFor(5, TimeUnit.SECONDS)) {
+        if (!p.waitFor(timeoutSec, TimeUnit.SECONDS)) {
             p.destroyForcibly()
             -1 to "timeout"
         } else {

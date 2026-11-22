@@ -45,16 +45,16 @@ object UsbTether {
         val list = if (enable) listOf("rndis") + others else others
         val arg = if (list.isEmpty()) "none" else list.joinToString(",")
 
-        // Several routes, because vendor ROMs differ. The exit code alone proves nothing
-        // (svc returns 0 even when ignored), so each is verified against the real interface.
-        val methods = listOf(
-            "svc usb setFunctions $arg",
-            "setprop sys.usb.config $arg",
-            "svc usb setFunctions $arg && svc usb setScreenUnlockedFunctions $arg",
-        )
+        // Only setting the USB function to rndis exposes a bare adapter with no DHCP/NAT, so the
+        // PC shows "Unidentified network". The real switch is the tethering service, reached via
+        // TetherCli run in app_process as root/shell. The function-only commands are a last resort.
+        val apk = ctx.applicationInfo.sourceDir
+        val cli = "CLASSPATH=$apk app_process /system/bin dev.oscar.controlpanel.TetherCli " +
+            if (enable) "start" else "stop"
+        val methods = listOf(cli, "svc usb setFunctions $arg")
         var ok = false
         for (cmd in methods) {
-            val (code, out) = su(cmd)
+            val (code, out) = Privilege.exec(cmd, 20)
             log.append("\$ ").append(cmd).append("\n  exit=").append(code)
             if (out.isNotEmpty()) log.append(" out=").append(out.take(200))
             log.append('\n')
