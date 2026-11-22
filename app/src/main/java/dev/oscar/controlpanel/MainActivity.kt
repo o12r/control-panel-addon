@@ -182,9 +182,10 @@ fun Panel(theme: String, onTheme: (String) -> Unit, lang: String, onLang: (Strin
                     if (rooted) {
                         usbBusy = true
                         scope.launch {
-                            withContext(Dispatchers.IO) { UsbTether.setOn(ctx, !usbOn) }
+                            val ok = withContext(Dispatchers.IO) { UsbTether.setOn(ctx, !usbOn) }
                             usbOn = withContext(Dispatchers.IO) { UsbTether.isOn(ctx) }
-                            usbLog = UsbTether.lastLog
+                            // Diagnostics only matter when the switch failed.
+                            usbLog = if (ok) "" else UsbTether.lastLog
                             usbBusy = false
                         }
                     } else {
