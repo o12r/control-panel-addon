@@ -1,8 +1,5 @@
 package dev.oscar.controlpanel
 
-import android.app.PendingIntent
-import android.content.Intent
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.service.quicksettings.Tile
@@ -38,10 +35,15 @@ class UsbTetherTileService : TileService() {
                 }
                 main.post { refresh() }
             } else {
-                main.post { openSystemTethering() }
+                main.post { openSettings() }
             }
         }
     }
+
+    /** Long press is handled by [TileSettingsActivity] via ACTION_QS_TILE_PREFERENCES. */
+
+    private fun openSettings(): Boolean =
+        openFirstSettings(SettingsLinks.tethering(), requestCode = 0)
 
     override fun onDestroy() {
         io.shutdown()
@@ -71,20 +73,5 @@ class UsbTetherTileService : TileService() {
             }
         )
         t.updateTile()
-    }
-
-    private fun openSystemTethering() {
-        val intent = Intent("android.settings.TETHER_SETTINGS")
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        if (Build.VERSION.SDK_INT >= 34) {
-            val pi = PendingIntent.getActivity(
-                this, 0, intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            startActivityAndCollapse(pi)
-        } else {
-            @Suppress("DEPRECATION")
-            startActivityAndCollapse(intent)
-        }
     }
 }
