@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Control Panel</string>
-    <string name="module_desc">Standalone control panel: USB tethering and wireless debugging switches, with quick settings tiles and long-press shortcuts.</string>
     <string name="usb_title">USB tethering</string>
     <string name="usb_root_yes">Privilege available: you can switch it on or off here.</string>
     <string name="usb_root_no">No privilege: the button opens the system tethering settings.</string>

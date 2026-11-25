@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">控制面板</string>
-    <string name="module_desc">独立控制面板：USB 共享与无线调试开关，带快捷设置磁贴和长按跳转。</string>
     <string name="usb_title">USB 共享网络</string>
     <string name="usb_root_yes">已获得权限：可以在这里直接开关。</string>
     <string name="usb_root_no">没有权限：按钮会打开系统的共享设置页面。</string>

@@ -9,10 +9,6 @@
         android:icon="@android:drawable/sym_def_app_icon"
         android:allowBackup="false"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
-        <!-- Listed by Xposed managers (Vector / LSPosed) so the module page can open this settings screen. -->
-        <meta-data android:name="xposedmodule" android:value="true" />
-        <meta-data android:name="xposeddescription" android:value="@string/module_desc" />
-        <meta-data android:name="xposedminversion" android:value="93" />
         <activity
             android:name=".SettingsActivity"
             android:exported="true"
@@ -22,11 +18,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <!-- Where an Xposed manager (Vector, LSPosed) opens the module's settings. -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
             </intent-filter>
             <!-- Adds a Settings row to the system app-info page (Android 13+). -->
             <intent-filter>

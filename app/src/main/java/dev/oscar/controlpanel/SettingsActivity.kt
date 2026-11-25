@@ -9,8 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 /**
  * The app's only screen: a standard Android Preference page (see [SettingsFragment]).
  *
- * Opened from the launcher icon, from an Xposed manager's module page (Vector / LSPosed read
- * `de.robv.android.xposed.category.MODULE_SETTINGS`), from the system's app-info "Settings" row,
+ * Opened from the launcher icon, from the system's app-info "Settings" row,
  * and as the fallback of the tiles' long-press.
  */
 class SettingsActivity : AppCompatActivity() {
