@@ -82,7 +82,7 @@ class TileSettingsActivity : Activity() {
     /** Last resort: the app's own screen, so the press is never a no-op. */
     private fun openApp() {
         startActivity(
-            Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            Intent(this, SettingsActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         )
         finish()
     }

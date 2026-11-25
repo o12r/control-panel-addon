@@ -13,9 +13,11 @@
     <string name="priv_root">Root</string>
     <string name="priv_shizuku">Shizuku</string>
     <string name="priv_none">None (open settings only)</string>
+    <string name="priv_current">Current: %1$s</string>
+    <string name="copy_done">Copied</string>
     <string name="priv_shizuku_missing">Shizuku isn\'t running. Start Shizuku, then try again.</string>
     <string name="usb_switch_failed">USB tethering didn\'t change. Open the app to see the details.</string>
-    <string name="usb_log_title">Last attempt (long-press to copy):</string>
+    <string name="usb_log_title">Last attempt (tap to copy)</string>
     <string name="usb_turn_on">Turn on</string>
     <string name="usb_turn_off">Turn off</string>
     <string name="usb_open_settings">Open tethering settings</string>
@@ -50,4 +52,39 @@
     <string name="lang_system">System</string>
     <string name="lang_en">English</string>
     <string name="lang_zh">中文</string>
+
+    <string-array name="theme_entries">
+        <item>@string/theme_system</item>
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
+        <item>@string/theme_black</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+        <item>black</item>
+    </string-array>
+
+    <string-array name="lang_entries">
+        <item>@string/lang_system</item>
+        <item>@string/lang_en</item>
+        <item>@string/lang_zh</item>
+    </string-array>
+    <string-array name="lang_values">
+        <item>system</item>
+        <item>en</item>
+        <item>zh</item>
+    </string-array>
+
+    <string-array name="priv_entries">
+        <item>@string/priv_root</item>
+        <item>@string/priv_shizuku</item>
+        <item>@string/priv_none</item>
+    </string-array>
+    <string-array name="priv_values">
+        <item>root</item>
+        <item>shizuku</item>
+        <item>none</item>
+    </string-array>
 </resources>

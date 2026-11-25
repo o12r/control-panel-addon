@@ -13,9 +13,11 @@
     <string name="priv_root">Root</string>
     <string name="priv_shizuku">Shizuku</string>
     <string name="priv_none">无（只打开设置页面）</string>
+    <string name="priv_current">当前：%1$s</string>
+    <string name="copy_done">已复制</string>
     <string name="priv_shizuku_missing">Shizuku 未运行，请先启动 Shizuku 再试。</string>
     <string name="usb_switch_failed">USB 共享网络没有变化，打开 App 查看详情。</string>
-    <string name="usb_log_title">最近一次尝试（长按可复制）：</string>
+    <string name="usb_log_title">最近一次尝试（点按复制）</string>
     <string name="usb_turn_on">开启</string>
     <string name="usb_turn_off">关闭</string>
     <string name="usb_open_settings">打开共享设置</string>
@@ -50,4 +52,39 @@
     <string name="lang_system">跟随系统</string>
     <string name="lang_en">English</string>
     <string name="lang_zh">中文</string>
+
+    <string-array name="theme_entries">
+        <item>@string/theme_system</item>
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
+        <item>@string/theme_black</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+        <item>black</item>
+    </string-array>
+
+    <string-array name="lang_entries">
+        <item>@string/lang_system</item>
+        <item>@string/lang_en</item>
+        <item>@string/lang_zh</item>
+    </string-array>
+    <string-array name="lang_values">
+        <item>system</item>
+        <item>en</item>
+        <item>zh</item>
+    </string-array>
+
+    <string-array name="priv_entries">
+        <item>@string/priv_root</item>
+        <item>@string/priv_shizuku</item>
+        <item>@string/priv_none</item>
+    </string-array>
+    <string-array name="priv_values">
+        <item>root</item>
+        <item>shizuku</item>
+        <item>none</item>
+    </string-array>
 </resources>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The whole app UI: standard Android Preference hierarchy (see SettingsFragment). -->
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:iconSpaceReserved="false" app:title="@string/priv_title">
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            app:key="autoPrivilege"
+            app:persistent="true"
+            app:summary="@string/priv_auto_help"
+            app:title="@string/priv_auto" />
+        <ListPreference
+            app:dialogTitle="@string/priv_title"
+            app:entries="@array/priv_entries"
+            app:entryValues="@array/priv_values"
+            app:iconSpaceReserved="false"
+            app:key="privilege"
+            app:persistent="true"
+            app:title="@string/priv_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:iconSpaceReserved="false" app:title="@string/usb_title">
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            app:key="usb_tether"
+            app:persistent="false"
+            app:title="@string/usb_title" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="usb_log"
+            app:persistent="false"
+            app:title="@string/usb_log_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:iconSpaceReserved="false" app:title="@string/wifi_title">
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            app:key="wifi_debug"
+            app:persistent="false"
+            app:title="@string/wifi_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:iconSpaceReserved="false" app:title="@string/updates">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="version"
+            app:persistent="false"
+            app:title="@string/app_name" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="banner"
+            app:persistent="false" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="check_updates"
+            app:persistent="false"
+            app:title="@string/check_updates" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="install_update"
+            app:persistent="false"
+            app:title="@string/install" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:iconSpaceReserved="false" app:title="@string/appearance">
+        <ListPreference
+            app:dialogTitle="@string/appearance"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_values"
+            app:iconSpaceReserved="false"
+            app:key="theme"
+            app:persistent="true"
+            app:title="@string/appearance"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:iconSpaceReserved="false" app:title="@string/language">
+        <ListPreference
+            app:dialogTitle="@string/language"
+            app:entries="@array/lang_entries"
+            app:entryValues="@array/lang_values"
+            app:iconSpaceReserved="false"
+            app:key="lang"
+            app:persistent="true"
+            app:title="@string/language"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
